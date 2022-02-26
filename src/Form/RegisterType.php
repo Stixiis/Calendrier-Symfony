@@ -5,11 +5,13 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Length;
 
 class RegisterType extends AbstractType
 {
@@ -18,35 +20,54 @@ class RegisterType extends AbstractType
         $builder
             ->add('firstname', texttype::class,[
                 'label' => 'Prénom',
+                'constraints' => new Length(0,2,30),
                 'attr'=> [
                     'placeholder'=>"Merci de saisir le prénom de l'utilisateur"
                 ]
             ])
             ->add('lastname', texttype::class,[
                 'label' => 'Nom',
+                'constraints' => new Length([
+                    'min' =>2,
+                    'max' =>30,
+                ]),
                 'attr'=> [
                     'placeholder'=>"Merci de saisir le Nom de l'utilisateur"
                 ]
             ])
             ->add('email', EmailType::class,[
                 'label' => 'Adresse Email',
+                'constraints' => new Length([
+                    'min' =>2,
+                    'max' =>30,
+                ]),
                 'attr'=> [
                     'placeholder'=>"Merci de saisir l'adresse Email de l'utilisateur"
                 ]
             ])
-            ->add('password',PasswordType::class,[
+            ->add('password',RepeatedType::class,[
+                'type' => PasswordType::class,
+                'invalid_message' =>'le mot de passe et la confirmation doivent etre identique',
                 'label' => 'Mot de passe',
+                'constraints' => new Length([
+                    'min' =>6,
+                    'max' =>30,
+                ]),
+                'required' => true,
+                'first_options' => [
+                    'label'=> 'Mot de passe',
+                    'attr'=> [
+                'placeholder'=>'Veuillez renseigner un Mot de passe'
+                ]
+                ],
+                'second_options' => [
+                    'label'=> 'Confirmez votre mot de passe',
                 'attr'=> [
-                    'placeholder'=>"Merci de definir le mot de passe de l'utilisateur"
-                 ]
+                    'placeholder'=>'Veuillez re-renseigner le Mot de passe'
+                ]
+            ],
             ])
-            ->add('password_confirm',PasswordType::class,[
-                'label'=> "Confirmez le mot de passe ",
-                'mapped'=> false,
-                'attr'=> [
-                    'placeholder'=>"Merci de confirmer le mot de passe de l'utilisateur"
-                        ]
-            ])
+
             ->add('submit', SubmitType::class, [
                 'label' => "Valider"
             ])
