@@ -10,7 +10,7 @@
 
     <!-- Bootstrap core CSS -->
     <link href="{{ asset('assets/css/bootstrap.min.css') }}" rel="stylesheet">
-
+    <link rel="stylesheet" href="{{ asset('assets/css/limayhub.css') }}">
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -33,7 +33,7 @@
 <body>
 <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <a class="navbar-brand" href="#">LimayHub</a>
+        <a class="navbar-brand" href="{{ path('home') }}">LimayHub</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -41,13 +41,21 @@
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
                     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+
                  </li>
             </ul>
-            {%  if app.user %}
-            <a href="{{ path('account') }}">Mon conpte</a> | <a href="{{ path('app_logout') }}">Déconnexion</a>
-            {%  else %}
-            <a href="{{ path('app_login') }}">Connexion</a> | <a href="{{ path('register') }}">Inscription</a>
-            {%  endif %}
+            <div class="navbar-item-custom">
+                {%  if app.user %}
+                    <a href="{{ path('account') }}">Mon conpte <small>({{ app.user.firstname }})</small></a> | <a href="{{ path('app_logout') }}">Déconnexion</a>
+                {%  else %}
+                    <a href="{{ path('app_login') }}">Connexion</a> | <a href="{{ path('register') }}">Inscription</a>
+                {%  endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                    | <a href="{{ path('admin') }}">Administration</a>
+                {% endif %}
+
+            </div>
+
         </div>
     </nav>
 </header>
@@ -113,11 +121,11 @@
     {% endblock %}
 
     <!-- FOOTER -->
-    <footer class="container">
-        <p class="float-right"><a href="#">Back to top</a></p>
-        <p>&copy; 2017-2020 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-    </footer>
+
 </main>
+<footer class="footer-custom">
+    <p>&copy; 2021-2022 LimayHub.  </p>
+</footer>
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="{{ asset('assets/js/bootstrap.bundle.js') }}"></script>
 </body>

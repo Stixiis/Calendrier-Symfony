@@ -17,7 +17,7 @@ class RegisterController extends AbstractController
     public function __construct(EntityManagerInterface $entityManager){
         $this->entityManager = $entityManager;
     }
-    #[Route('/ajout', name: 'register')]
+    #[Route('/admin/ajout', name: 'register')]
     public function index(Request $request, UserPasswordHasherInterface $encoder): Response
     {
         $user = new User();
